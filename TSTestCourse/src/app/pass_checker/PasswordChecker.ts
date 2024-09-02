@@ -1,8 +1,8 @@
 export enum PasswordErrors {
-  SHORT = "Password is too short!",
-  NO_UPPER_CASE = "Upper case letter required!",
-  NO_LOWER_CASE = "Lower case letter required!",
-  NO_NUMBER = "At least one number required!",
+  TOO_SHORT = "Password is too short!",
+  NO_UPPER_CASE = "An uppercase letter is required!",
+  NO_LOWER_CASE = "A lowercase letter is required!",
+  NO_NUMBER = "At least one number is required!",
 }
 
 export interface CheckResult {
@@ -41,7 +41,7 @@ export class PasswordChecker {
 
   private checkForLength(password: string, reasons: PasswordErrors[]) {
     if (password.length < 8) {
-      reasons.push(PasswordErrors.SHORT);
+      reasons.push(PasswordErrors.TOO_SHORT);
     }
   }
 

@@ -14,12 +14,12 @@ describe("PasswordChecker Test Suite", () => {
     it("invalidate a password with less than 8 characters", () => {
       const actual = sut.checkPassword("1234567");
       expect(actual.valid).toBe(false);
-      expect(actual.reasons).toContain(PasswordErrors.SHORT);
+      expect(actual.reasons).toContain(PasswordErrors.TOO_SHORT);
     });
 
     it("validate a password with 8 or more characters", () => {
       const actual = sut.checkPassword("12345678");
-      expect(actual.reasons).not.toContain(PasswordErrors.SHORT);
+      expect(actual.reasons).not.toContain(PasswordErrors.TOO_SHORT);
     });
 
     it("invalidate a password with no uppercase letters", () => {
