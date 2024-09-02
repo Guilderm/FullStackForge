@@ -128,3 +128,20 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Storybook build output
+storybook-static/
+
+# Jest coverage reports
+coverage/
+
+# TypeScript declaration files
+*.d.ts
+
+# Build artifacts
+dist/
+build/
+
+# Temporary files
+temp/
+tmp/
