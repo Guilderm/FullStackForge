@@ -6,7 +6,7 @@
     "esModuleInterop": true, // Enables interoperability between CommonJS and ES6 modules
     "skipLibCheck": true, // Skip type checking of declaration files
     "forceConsistentCasingInFileNames": true, // Ensure consistent file casing
-    "types": ["jest"] // Include type definitions for Jest
+    "types": ["node", "jest"]
   },
   "include": [
     "src/**/*.ts", // Include all TypeScript files in the src directory
