@@ -86,7 +86,7 @@ describe("Utils test suite", () => {
       ]);
       expect(output.characters).toContain<string>("M");
       expect(output.characters).toEqual(
-        expect.arrayContaining(["S", "t", "r", "i", "n", "g", "M", "y", "-"]),
+        expect.arrayContaining(["S", "t", "r", "i", "n", "g", "M", "y", "-"])
       );
     });
     test("return defined extra info", () => {
