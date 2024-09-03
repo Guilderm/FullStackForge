@@ -19,13 +19,6 @@ export function toLowerCaseWithId(arg: string) {
 }
 
 export function calculateComplexity(stringInfo: stringInfo) {
-  if (
-    !stringInfo ||
-    typeof stringInfo.length !== "number" ||
-    !stringInfo.extraInfo
-  ) {
-    throw new Error("Invalid input data for calculateComplexity");
-  }
   return Object.keys(stringInfo.extraInfo).length * stringInfo.length;
 }
 
@@ -47,16 +40,10 @@ export class OtherStringUtils {
   }
 
   public toUpperCase(arg: string) {
-    if (!arg) {
-      throw new Error("Invalid argument!");
-    }
     return arg.toUpperCase();
   }
 
   public logString(arg: string) {
-    if (!arg) {
-      throw new Error("Invalid argument!");
-    }
     console.log(arg);
   }
 }

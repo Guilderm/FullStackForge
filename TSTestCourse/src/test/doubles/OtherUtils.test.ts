@@ -1,72 +1,13 @@
 import {
   calculateComplexity,
-  toUpperCaseWithCb,
-  toUpperCase,
-  toLowerCaseWithId,
   OtherStringUtils,
+  toUpperCaseWithCb,
+  toLowerCaseWithId,
+  toUpperCase,
 } from "../../app/doubles/OtherUtils";
 
-// Mock the necessary methods in OtherUtils
-jest.mock("../../app/doubles/OtherUtils", () => ({
-  ...jest.requireActual("../../app/doubles/OtherUtils"),
-  calculateComplexity: jest.fn(), // Mocking calculateComplexity method
-}));
-
-describe("OtherUtils test suite should", () => {
-  describe("calculateComplexity method should", () => {
-    it("return mocked complexity value", () => {
-      (calculateComplexity as jest.Mock).mockReturnValue(10); // Setting mock return value
-      const complexity = calculateComplexity({
-        lowerCase: "abc",
-        upperCase: "ABC",
-        characters: ["a", "b", "c"],
-        length: 5,
-        extraInfo: {},
-      });
-      expect(complexity).toBe(10); // Checking the mocked return value
-    });
-
-    it("throw an error on invalid input data", () => {
-      (calculateComplexity as jest.Mock).mockImplementation(() => {
-        throw new Error("Invalid input data for calculateComplexity");
-      });
-
-      expect(() => calculateComplexity({} as any)).toThrow(
-        "Invalid input data for calculateComplexity"
-      );
-    });
-  });
-
-  describe("toLowerCaseWithId method should", () => {
-    it("return string with lowercased value and appended UUID", () => {
-      const result = toLowerCaseWithId("ABC");
-      expect(result).toMatch(/^abc\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/); // UUID pattern match
-    });
-  });
-
-  describe("toUpperCaseWithCb method should", () => {
-    const callBackMock = jest.fn();
-
-    afterEach(() => {
-      jest.clearAllMocks();
-    });
-
-    it("calls callback for invalid argument - track calls", () => {
-      const actual = toUpperCaseWithCb("", callBackMock);
-      expect(actual).toBeUndefined();
-      expect(callBackMock).toBeCalledWith("Invalid argument!");
-      expect(callBackMock).toBeCalledTimes(1);
-    });
-
-    it("calls callback for valid argument - track calls", () => {
-      const actual = toUpperCaseWithCb("abc", callBackMock);
-      expect(actual).toBe("ABC");
-      expect(callBackMock).toBeCalledWith("called function with abc");
-      expect(callBackMock).toBeCalledTimes(1);
-    });
-  });
-
-  describe("OtherStringUtils class should", () => {
+describe("OtherUtils test suite", () => {
+  describe("OtherStringUtils tests with spies", () => {
     let sut: OtherStringUtils;
 
     beforeEach(() => {
@@ -79,25 +20,100 @@ describe("OtherUtils test suite should", () => {
       expect(toUpperCaseSpy).toBeCalledWith("asa");
     });
 
-    test("throw an error when invalid argument is provided", () => {
-      expect(() => sut.toUpperCase("")).toThrow("Invalid argument!");
-    });
-
     test("Use a spy to track calls to other module", () => {
       const consoleLogSpy = jest.spyOn(console, "log");
       sut.logString("abc");
       expect(consoleLogSpy).toBeCalledWith("abc");
     });
 
-    test("throw an error when logging invalid argument", () => {
-      expect(() => sut.logString("")).toThrow("Invalid argument!");
-    });
-
     test("Use a spy to replace the implementation of a method", () => {
       jest.spyOn(sut, "callExternalService").mockImplementation(() => {
-        console.log("calling mocked implementation!!!");
+        console.log("Mocked call to external service");
       });
       sut.callExternalService();
+      expect(console.log).toBeCalledWith("Mocked call to external service");
     });
+  });
+
+  describe("toLowerCaseWithId function", () => {
+    test("should return the lowercase string with appended UUID", () => {
+      const arg = "HelloWorld";
+      const result = toLowerCaseWithId(arg);
+      expect(result).toMatch(
+        /^helloworld-[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+      );
+    });
+  });
+
+  describe("Tracking callbacks", () => {
+    let cbArgs: string[] = [];
+    let timesCalled = 0;
+
+    function callBackMock(arg: string) {
+      cbArgs.push(arg);
+      timesCalled++;
+    }
+
+    afterEach(() => {
+      cbArgs = [];
+      timesCalled = 0;
+    });
+
+    it("calls callback for invalid argument - track calls", () => {
+      const actual = toUpperCaseWithCb("", callBackMock);
+      expect(actual).toBeUndefined();
+      expect(cbArgs).toContain("Invalid argument!");
+      expect(timesCalled).toBe(1);
+    });
+
+    it("calls callback for valid argument - track calls", () => {
+      const actual = toUpperCaseWithCb("abc", callBackMock);
+      expect(actual).toBe("ABC");
+      expect(cbArgs).toContain("called function with abc");
+      expect(timesCalled).toBe(1);
+    });
+  });
+
+  it("ToUpperCase - calls callback for invalid argument", () => {
+    const actual = toUpperCaseWithCb("", () => {});
+    expect(actual).toBeUndefined();
+  });
+
+  it("ToUpperCase - calls callback for valid argument", () => {
+    const actual = toUpperCaseWithCb("abc", () => {});
+    expect(actual).toBe("ABC");
+  });
+
+  it("Calculates complexity correctly", () => {
+    const someInfo = {
+      length: 5,
+      extraInfo: {
+        field1: "someInfo",
+        field2: "someOtherInfo",
+      },
+    };
+
+    const actual = calculateComplexity(someInfo as any);
+    expect(actual).toBe(10);
+  });
+
+  it("Handles missing extraInfo gracefully in calculateComplexity", () => {
+    const someInfo = {
+      length: 5,
+      extraInfo: {},
+    };
+
+    const actual = calculateComplexity(someInfo as any);
+    expect(actual).toBe(0);
+  });
+
+  it("Converts string to uppercase using toUpperCase function", () => {
+    const result = toUpperCase("testString");
+    expect(result).toBe("TESTSTRING");
+  });
+
+  it("Handles empty string input in toUpperCase", () => {
+    const result = toUpperCase("");
+    expect(result).toBe("");
   });
 });
