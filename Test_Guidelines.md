@@ -94,3 +94,21 @@
 
 - **Add Comments When Necessary**: While tests should generally be self-explanatory, add comments to explain complex logic or unusual cases.
 - **Maintain Test Documentation**: Keep any associated test documentation up to date, especially if it explains the testing strategy or non-obvious scenarios.
+
+
+## 14.  Use `actual` and `expected`
+
+### Example:
+
+```typescript
+test('should return the lowercase string with appended UUID', () => {
+    const actual = "HelloWorld";
+    const expected = toLowerCaseWithId(actual);
+
+    expect(expected.startsWith('helloworld')).toBe(true);
+
+    const uuidPart = expected.slice('helloworld'.length);
+    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    expect(uuidPart).toMatch(uuidRegex);
+});
+```

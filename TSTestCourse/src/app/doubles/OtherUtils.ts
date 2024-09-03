@@ -24,13 +24,17 @@ export function calculateComplexity(stringInfo: stringInfo) {
 
 export function toUpperCaseWithCb(
   arg: string,
-  callBack: LoggerServiceCallBack
+  callBack?: LoggerServiceCallBack
 ) {
   if (!arg) {
-    callBack("Invalid argument!");
+    if (callBack) {
+      callBack("Invalid argument!");
+    }
     return;
   }
-  callBack(`called function with ${arg}`);
+  if (callBack) {
+    callBack(`called function with ${arg}`);
+  }
   return arg.toUpperCase();
 }
 
