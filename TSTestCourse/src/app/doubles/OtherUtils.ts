@@ -1,51 +1,62 @@
-// OtherUtils.ts - Example implementations for functions and classes
+import { v4 } from "uuid";
 
-export function calculateComplexity(data: {
+export type stringInfo = {
+  lowerCase: string;
+  upperCase: string;
+  characters: string[];
   length: number;
-  extraInfo: any;
-}): number {
-  // Example implementation of calculateComplexity
-  return data.length + 10; // Simulated complexity calculation
+  extraInfo: Object;
+};
+
+type LoggerServiceCallBack = (arg: string) => void;
+
+export function toUpperCase(arg: string) {
+  return arg.toUpperCase();
+}
+
+export function toLowerCaseWithId(arg: string) {
+  return arg.toLowerCase() + v4();
+}
+
+export function calculateComplexity(stringInfo: stringInfo) {
+  if (
+    !stringInfo ||
+    typeof stringInfo.length !== "number" ||
+    !stringInfo.extraInfo
+  ) {
+    throw new Error("Invalid input data for calculateComplexity");
+  }
+  return Object.keys(stringInfo.extraInfo).length * stringInfo.length;
 }
 
 export function toUpperCaseWithCb(
-  str: string,
-  callback: (msg: string) => void
-): string | undefined {
-  if (str.length === 0) {
-    callback("Invalid argument!");
-    return undefined;
+  arg: string,
+  callBack: LoggerServiceCallBack
+) {
+  if (!arg) {
+    callBack("Invalid argument!");
+    return;
   }
-  callback(`called function with ${str}`);
-  return str.toUpperCase();
-}
-
-export function toUpperCase(str: string): string {
-  return str.toUpperCase();
-}
-
-export function toLowerCaseWithId(str: string): string {
-  const uuid = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
-    /[xy]/g,
-    function (c) {
-      const r = (Math.random() * 16) | 0,
-        v = c === "x" ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    }
-  );
-  return `${str.toLowerCase()}${uuid}`;
+  callBack(`called function with ${arg}`);
+  return arg.toUpperCase();
 }
 
 export class OtherStringUtils {
-  toUpperCase(str: string): string {
-    return str.toUpperCase();
+  public callExternalService() {
+    console.log("Calling external service!!!");
   }
 
-  logString(str: string): void {
-    console.log(str);
+  public toUpperCase(arg: string) {
+    if (!arg) {
+      throw new Error("Invalid argument!");
+    }
+    return arg.toUpperCase();
   }
 
-  callExternalService(): void {
-    console.log("calling external service...");
+  public logString(arg: string) {
+    if (!arg) {
+      throw new Error("Invalid argument!");
+    }
+    console.log(arg);
   }
 }
